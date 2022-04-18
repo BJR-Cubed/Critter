@@ -28,10 +28,10 @@ const userModel = (sequelize, DataTypes) => {
   });
 
   model.authenticateBasic = async function(handle, password) {
-      const user = await this.findOne({ where: { handle } });
-      const valid = await bcrypt.compare(password, user.password);
-      if (valid){ return user; }
-      throw new Error('Invalid User');
+    const user = await this.findOne({ where: { handle } });
+    const valid = await bcrypt.compare(password, user.password);
+    if (valid){ return user; }
+    throw new Error('Invalid User');
   };
 
   model.authenticateToken = async function(token) {
@@ -39,10 +39,10 @@ const userModel = (sequelize, DataTypes) => {
     const user = await this.findOne({ where: {handle: parsedToken.username} });
     if(user) { return user; }
     throw new Error('User Not Found');
-  }
+  };
 
   return model;
 
-}
+};
 
 module.exports = userModel;
