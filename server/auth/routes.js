@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 
 const { users } = require('./models');
+const basicAuth = require('./middleware/basic.js');
 
 router.post('/signup', async (req, res, next) => {
   try {
@@ -17,9 +18,14 @@ router.post('/signup', async (req, res, next) => {
 
 });
 
-router.post('/signin', (req, res, next) => {
+router.post('/signin', basicAuth, (req, res, next) => {
   console.log('signin route hit');
-  res.status(200).send('Signin Mission Accomplished!');
+  res.status(200).json({
+    user: req.user,
+    token: req.user.token
+  });
+  // res.status(200).send('Signin proof of life!');
+
 });
 
 router.get('/users', async (req, res, next) => {
