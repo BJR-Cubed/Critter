@@ -1,0 +1,23 @@
+{
+  "name": "critter",
+  "version": "1.0.0",
+  "description": "## Summary",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BJR-Cubed/Critter.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BJR-Cubed/Critter/issues"
+  },
+  "homepage": "https://github.com/BJR-Cubed/Critter#readme",
+  "dependencies": {
+    "jest": "^27.5.1"
+  }
+}
