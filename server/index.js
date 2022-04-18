@@ -2,6 +2,7 @@
 
 const PORT = process.env.PORT || 3000;
 
+const authRouter = require('./auth/routes.js');
 
 const express  = require ('express');
 
@@ -11,6 +12,7 @@ const cors = require ('cors');
 
 app.use(cors());
 app.use(express.json());
+app.use(authRouter);
 
 app.use('/', (req, res, next) => {
   console.log('route hit');
