@@ -30,7 +30,7 @@ describe('Testing auth basic middleware', () => {
   });
 
 
-  test('Req with a bad auth header', () => {
+  test('Assigns req.user ', () => {
     
   });
 });
