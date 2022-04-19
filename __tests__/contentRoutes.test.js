@@ -19,7 +19,6 @@ describe('Basic Server Functionality', () => {
     expect(response.status).toBe(404);
   });
 
-  
 
 
 });
