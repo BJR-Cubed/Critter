@@ -2,6 +2,7 @@
 
 const supertest = require('supertest');
 const { authSequelize } = require('../server/auth/models/index.js');
+const { contentSequelize } = require('../server/models/');
 const { app } = require('../server/server.js');
 const request = supertest(app);
 
@@ -9,18 +10,20 @@ const request = supertest(app);
 const user = { 
   handle: 'testHandle', 
   displayName: 'testHandle', 
-  password: 'password'
+  password: 'password',
 };
 
 let testUser; //await request.post('/signup').send(user)
 
 beforeAll((done) => {
   authSequelize.sync();
+  contentSequelize.sync();
   done();
 });
 
 afterAll(() => {
   authSequelize.drop();
+  contentSequelize.drop();
 });
 
 describe('Content Routes functionality with login token', () => {
@@ -28,7 +31,12 @@ describe('Content Routes functionality with login token', () => {
     testUser = await request.post('/signup').send(user);
     testUser = testUser.body;
 
-    const response = await request.post('/messages').set('authorization', `Bearer ${testUser.token}`);
+    const response = await request
+      .post('/messages')
+      .set('authorization', `Bearer ${testUser.token}`)
+      .send({
+        body: 'Our first message',
+      });
 
 
     // console.log('Testuser keys are', Object.keys(testUser));
