@@ -44,7 +44,7 @@ describe('Content Routes functionality with login token', () => {
     // const response = await request.get('/badroute');
     
     expect(response.status).toBe(201); //404 until create
-    expect(response.body.timeStamp).toBeTruthy();
+    expect(response.body.timestamp).toBeTruthy();
   });
 
   test('Should send 404 code on bad route', async () => {
