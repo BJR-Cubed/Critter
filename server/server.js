@@ -2,6 +2,8 @@
 
 const authRouter = require('./auth/routes.js');
 
+const content = require('./routes');
+
 /* const { authDb } = require('./src/auth/models');
   
   await authDb.sync(); */
@@ -15,6 +17,7 @@ const cors = require ('cors');
 app.use(cors());
 app.use(express.json());
 app.use(authRouter);
+app.use(content);
 
 // app.use('/', (req, res, next) => {
 //   console.log('route hit');
