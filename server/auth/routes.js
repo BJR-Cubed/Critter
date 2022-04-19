@@ -21,10 +21,8 @@ router.post('/signup', async (req, res, next) => {
 
 router.post('/signin', basicAuth, (req, res, next) => {
   console.log('signin route hit');
-  res.status(200).json({
-    user: req.user,
-    token: req.user.token,
-  });
+  res.status(200).json(req.user);
+  // token: req.user.token,
   // res.status(200).send('Signin proof of life!');
 
 });
