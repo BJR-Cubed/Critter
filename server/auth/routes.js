@@ -5,6 +5,7 @@ const router = express.Router();
 
 const { users } = require('./models');
 const basicAuth = require('./middleware/basic.js');
+const bearerAuth = require('./middleware/bearer.js');
 
 router.post('/signup', async (req, res, next) => {
   try {
@@ -22,13 +23,13 @@ router.post('/signin', basicAuth, (req, res, next) => {
   console.log('signin route hit');
   res.status(200).json({
     user: req.user,
-    token: req.user.token
+    token: req.user.token,
   });
   // res.status(200).send('Signin proof of life!');
 
 });
 
-router.get('/users', async (req, res, next) => {
+router.get('/users', bearerAuth, async (req, res, next) => {
   let userTable = await users.findAll({});
   console.log('users route hit');
   res.status(200).json(userTable);
