@@ -1,35 +1,20 @@
 'use strict';
 
 const supertest = require('supertest');
-// const { authSequelize } = require('../server/auth/models/index.js');
-// const { contentSequelize } = require('../server/models/');
 const { app } = require('../server/server.js');
 const request = supertest(app);
 
-//server/index.js needs some work?
 const user = { 
   handle: 'testHandle', 
   displayName: 'testHandle', 
   password: 'password',
 };
 
-let testUser; //await request.post('/signup').send(user)
-
-// beforeAll((done) => {
-//   authSequelize.sync();
-//   contentSequelize.sync();
-//   done();
-// });
-
-// afterAll(() => {
-//   authSequelize.drop();
-//   contentSequelize.drop();
-// });
+let testUser; 
 
 describe('Content Routes functionality with login token', () => {
   test('Should post a message', async () => {
     testUser = await request.post('/signup').send(user);
-    console.log(testUser.body);
     testUser = testUser.body;
 
     const response = await request
@@ -38,13 +23,8 @@ describe('Content Routes functionality with login token', () => {
       .send({
         body: 'Our first message',
       });
-
-
-    // console.log('Testuser keys are', Object.keys(testUser));
-    // console.log('Testuser body is', testUser.body);
-    // const response = await request.get('/badroute');
     
-    expect(response.status).toBe(201); //404 until create
+    expect(response.status).toBe(201); 
     expect(response.body.timestamp).toBeTruthy();
   });
 
@@ -102,8 +82,6 @@ describe('Content Routes functionality with login token', () => {
 
 describe('Testing with invalid requests', () => {
   test('Should post a message', async () => {
-    // testUser = await request.post('/signup').send(user);
-    // testUser = testUser.body;
 
     const response = await request
       .post('/messages')
@@ -112,7 +90,7 @@ describe('Testing with invalid requests', () => {
         //purposely creating an error with empty object
       });
     
-    expect(response.status).toBe(500); //404 until create
+    expect(response.status).toBe(500); 
   });
 
   test('Should not get a message if it does not exist', async () => {
@@ -150,6 +128,5 @@ describe('Testing with invalid requests', () => {
 
     expect(response.status).toBe(500);
   });
-
 
 });

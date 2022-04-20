@@ -14,7 +14,7 @@ module.exports = async (req, res, next) => {
     if (req.user.handle === foundMessage.author || req.user.role === 'admin') {
       next();
     } else {
-      // throw an error or something like that
+      // throw an error 
       let error = new Error('You cannot modify another user\'s content');
       error.status = 403;
       next(error);
