@@ -97,11 +97,6 @@ describe('Content Routes functionality with login token', () => {
     
     expect(response.status).toBe(403);
   });
-
-
-
-
-
 });
 
 describe('Testing with invalid requests', () => {
@@ -124,5 +119,34 @@ describe('Testing with invalid requests', () => {
 
     expect(response.status).toBe(500);
   });
+
+  test('Should not delete a message if id is invalid', async () => {
+    let response = await request.delete('/messages/1999').set('authorization', `Bearer ${testUser.token}`);
+
+    expect(response.status).toBe(500);
+  });
+
+  test('Should not update a message if id is invalid', async () => {
+    let response = await request.put('/messages/1999').set('authorization', `Bearer ${testUser.token}`);
+
+    expect(response.status).toBe(500);
+  });
+
+  test('Should not update a message if update body data is invalid', async () => {
+    let response = await request
+      .post('/messages')
+      .set('authorization', `Bearer ${testUser.token}`)
+      .send({
+        body: 'Our test message',
+      });
+    let id = response.body.id;  
+
+    response = await request.put(`/messages/${id}`).set('Authorization', `Bearer ${testUser.token}`).send({
+      body: null,
+    });
+
+    expect(response.status).toBe(500);
+  });
+
 
 });
