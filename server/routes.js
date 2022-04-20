@@ -56,7 +56,7 @@ router.put('/messages/:id', bearerAuth, accessAuth, async (req, res, next) => {
     if (record[0] === 0) {
       throw new Error('Record not found');
     }
-    let updatedRecord = await messages.findOne({ id: req.params.id });
+    let updatedRecord = await messages.findOne({ where: { id: req.params.id } });
     // console.log(req.body.body);
     // console.log(updatedRecord);
     res.status(200).json(updatedRecord);
@@ -68,7 +68,7 @@ router.put('/messages/:id', bearerAuth, accessAuth, async (req, res, next) => {
 
 router.delete('/messages/:id', bearerAuth, accessAuth, async (req, res, next) => {
   try {
-    let deletedRecord = await messages.findOne({ id: req.params.id });
+    let deletedRecord = await messages.findOne({ where: { id: req.params.id } });
     if (deletedRecord) {
       await messages.destroy({ where: { id: req.params.id } });
       res.status(204).send('Message Deleted');
