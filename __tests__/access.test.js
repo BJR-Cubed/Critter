@@ -73,13 +73,41 @@ describe('Testing message access', () => {
     testAdmin = testAdmin.body;
 
     // post a message
+    let response = await request
+      .post('/messages')
+      .set('Authorization', `Bearer ${testUser1.token}`)
+      .send({ body: 'I hope the admin doesn\'t change this' });
+
+    let id = response.body.id;
 
     // try to update it
+    response = await request
+      .put(`/messages/${id}`)
+      .set('Authorization', `Bearer ${testAdmin.token}`)
+      .send({ body: 'Nope, I can change it' });
+
+    expect(response.status).toBe(200);
+    expect(response.body.body).toBe('Nope, I can change it');
   });
 
-  test('Admin should be able to delete another user\'s message',{
+  test('Admin should be able to delete another user\'s message', async () => {
+    let response = await request
+      .post('/messages')
+      .set('Authorization', `Bearer ${testUser1.token}`)
+      .send({ body: 'I hope my message doesn\'t get deleted' });
 
+    let id = response.body.id;
+
+    response = await request
+      .delete(`/messages/${id}`)
+      .set('Authorization', `Bearer ${testAdmin.token}`);
+
+    expect(response.status).toBe(204);
+
+    response = await request
+      .get(`/messages/${id}`)
+      .set('Authorization', `Bearer ${testUser1.token}`);
+
+    expect(response.status).toBe(500);
   });
-
-  // Test for admin bypass
 });
