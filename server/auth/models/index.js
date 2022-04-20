@@ -5,7 +5,7 @@ const { Sequelize, DataTypes } = require('sequelize');
 const userModel = require('./users');
 
 // This will assign the Heroku-specific configs if the database is deployed.
-const sequelizeConfig = process.env.DATABASE_URL ?
+const sequelizeConfig = process.env.HEROKU_POSTGRESQL_GOLD_URL ?
   {
     dialectOptions: {
       ssl: {
@@ -16,7 +16,7 @@ const sequelizeConfig = process.env.DATABASE_URL ?
   } :
   {};
 
-const dbUrl = process.env.DATABASE_URL || 'sqlite::memory';
+const dbUrl = process.env.HEROKU_POSTGRESQL_GOLD_URL || 'sqlite::memory';
 
 const sequelize = new Sequelize(dbUrl, sequelizeConfig);
 
