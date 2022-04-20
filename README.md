@@ -1,6 +1,6 @@
 # Critter
 
-## Summary 
+## Summary
 
 Social Media platform hosted by Heroku where users can communicate via CLI in the browser. Users can create an account and post, edit, and delete "Creets" on a public live timeline.
 
