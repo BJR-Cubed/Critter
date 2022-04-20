@@ -18,7 +18,4 @@ contentSequelize.sync()
   })
   .catch(console.error);
 
-/* const { authDb } = require('./src/auth/models');
-  
-  await authDb.sync(); */
 

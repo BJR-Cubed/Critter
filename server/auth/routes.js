@@ -9,12 +9,11 @@ const bearerAuth = require('./middleware/bearer.js');
 
 router.post('/signup', async (req, res, next) => {
   try {
-    if(!req.body.handle || !req.body.displayName || !req.body.password){
+    if(!req.body.handle || !req.body.displayName || !req.body.password) {
       throw new Error('Need to enter value in all fields');
     }
     let userRecord = await users.create(req.body);
-    console.log('signup route hit');
-    res.status(200).json(userRecord); // using .json instead of .send
+    res.status(200).json(userRecord);
   } catch (error) {
     console.error(error);
     next(error);
@@ -22,16 +21,11 @@ router.post('/signup', async (req, res, next) => {
 });
 
 router.post('/signin', basicAuth, (req, res, next) => {
-  console.log('signin route hit');
   res.status(200).json(req.user);
-  // token: req.user.token,
-  // res.status(200).send('Signin proof of life!');
-
 });
 
 router.get('/users', bearerAuth, async (req, res, next) => {
   let userTable = await users.findAll({});
-  console.log('users route hit');
   res.status(200).json(userTable);
 });
 
