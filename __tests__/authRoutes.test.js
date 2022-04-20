@@ -47,4 +47,42 @@ describe('Auth Route Testing', () => {
     expect(response.body.displayName).toBe(testDisplayName);
     expect(response.body.token).toBeTruthy();
   });
+
+  test('Should not allow a user with invalid credentials to signin', async () => {
+    let response = await request.post('/signin').set('Authorization', 'Basic BadAuthString');
+
+    expect(response.status).toBe(403);
+  });
+
+  test('Should deny signup if displayName is empty', async () => {
+    let response = await request.post('/signup').send({
+      displayName: '',
+      handle: testHandle,
+      password: testpassword,
+    });
+
+    expect(response.status).toBe(500);
+
+  });
+
+  test('Should deny signup if handle is empty', async () => {
+    let response = await request.post('/signup').send({
+      displayName: testDisplayName,
+      handle: '',
+      password: testpassword,
+    });
+
+    expect(response.status).toBe(500);
+    
+  });
+  test('Should deny signup if password is empty', async () => {
+    let response = await request.post('/signup').send({
+      displayName: testDisplayName,
+      handle: testHandle,
+      password: '',
+    });
+
+    expect(response.status).toBe(500);
+    
+  });
 });

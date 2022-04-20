@@ -11,7 +11,7 @@ router.post('/messages', bearerAuth, async (req, res, next) => {
     if(!req.body) throw new Error('No req.body');
     // console.log('Type of messages', typeof(messages));
     console.log(req.body);
-    console.log(req.user);
+    // console.log(req.user);
     let newRecord = await messages.create({ // .create(req.body)
       ...req.body,
       timestamp: Date.now(),
@@ -26,6 +26,54 @@ router.post('/messages', bearerAuth, async (req, res, next) => {
     next(error);
   }
 
+});
+
+router.get('/messages', bearerAuth, async (req, res, next) => {
+  try{
+    let records = await messages.findAll({});
+    res.status(200).json(records);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.get('/messages/:id', bearerAuth, async (req, res, next) => {
+  try{
+    let record = await messages.findOne({id: req.params.id});
+    res.status(200).json(record);
+  }catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.put('/messages/:id', bearerAuth, async (req, res, next) => {
+  try{
+    await messages.update(req.body, { where: {id: req.params.id}});
+    let updatedRecord = await messages.findOne({id: req.params.id});
+    // console.log(req.body.body);
+    // console.log(updatedRecord);
+    res.status(200).json(updatedRecord);
+  }catch(error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.delete('/messages/:id', bearerAuth, async (req, res, next) => {
+  try{
+    let deletedRecord = await messages.findOne({id: req.params.id});
+    if(deletedRecord){
+      await messages.destroy({ where: {id: req.params.id}});
+      res.status(204).send('Message Deleted');
+    }else{
+      throw new Error('Record not found');
+    }
+  } catch(error) {
+    console.error(error);
+    next(error);
+  }
 });
 
 // Create our routes here
