@@ -24,3 +24,6 @@ module.exports = async (req, res, next) => {
   }
 };
 
+
+// Unit testing:
+//bring in username and password and retun mock object

@@ -41,6 +41,7 @@ router.get('/messages', bearerAuth, async (req, res, next) => {
 router.get('/messages/:id', bearerAuth, async (req, res, next) => {
   try{
     let record = await messages.findOne({id: req.params.id});
+    if(!record) throw new Error('Record not found');
     res.status(200).json(record);
   }catch (error) {
     console.error(error);
@@ -50,7 +51,10 @@ router.get('/messages/:id', bearerAuth, async (req, res, next) => {
 
 router.put('/messages/:id', bearerAuth, async (req, res, next) => {
   try{
-    await messages.update(req.body, { where: {id: req.params.id}});
+    let record = await messages.update(req.body, { where: {id: req.params.id}});
+    if(record[0] === 0){ 
+      throw new Error('Record not found');
+    }
     let updatedRecord = await messages.findOne({id: req.params.id});
     // console.log(req.body.body);
     // console.log(updatedRecord);
