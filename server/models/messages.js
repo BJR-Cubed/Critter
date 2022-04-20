@@ -6,9 +6,6 @@ const messageModel = (sequelize, DataTypes) => {
     timestamp: { type: DataTypes.INTEGER, allowNull: false },
     body: { type: DataTypes.STRING, allowNull: false },
     length: { type: DataTypes.INTEGER, allowNull: false },
-    // Stretch goal
-    // tags
-    // recipients
   });
 
   return model;

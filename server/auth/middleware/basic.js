@@ -4,7 +4,6 @@ const base64 = require('base-64');
 
 const { users } = require('../models');
 
-
 module.exports = async (req, res, next) => {
   if (!req.headers.authorization) {
     return _authError();
@@ -23,7 +22,3 @@ module.exports = async (req, res, next) => {
     res.status(403).send('invalid Login');
   }
 };
-
-
-// Unit testing:
-//bring in username and password and retun mock object
