@@ -1,8 +1,8 @@
 'use strict';
 
 const supertest = require('supertest');
-const { authSequelize } = require('../server/auth/models/index.js');
-const { contentSequelize } = require('../server/models/');
+// const { authSequelize } = require('../server/auth/models/index.js');
+// const { contentSequelize } = require('../server/models/');
 const { app } = require('../server/server.js');
 const request = supertest(app);
 
@@ -15,20 +15,21 @@ const user = {
 
 let testUser; //await request.post('/signup').send(user)
 
-beforeAll((done) => {
-  authSequelize.sync();
-  contentSequelize.sync();
-  done();
-});
+// beforeAll((done) => {
+//   authSequelize.sync();
+//   contentSequelize.sync();
+//   done();
+// });
 
-afterAll(() => {
-  authSequelize.drop();
-  contentSequelize.drop();
-});
+// afterAll(() => {
+//   authSequelize.drop();
+//   contentSequelize.drop();
+// });
 
 describe('Content Routes functionality with login token', () => {
   test('Should post a message', async () => {
     testUser = await request.post('/signup').send(user);
+    console.log(testUser.body);
     testUser = testUser.body;
 
     const response = await request
@@ -114,8 +115,10 @@ describe('Testing with invalid requests', () => {
     expect(response.status).toBe(500); //404 until create
   });
 
-  test('Should not get messages and return null if id does not exist', async () => {
-    let response = await request.get('/messages/1999').set('authorization', `Bearer ${testUser.token}`);
+  test('Should not get a message if it does not exist', async () => {
+    let response = await request
+      .get('/messages/1999')
+      .set('authorization', `Bearer ${testUser.token}`);
 
     expect(response.status).toBe(500);
   });

@@ -1,6 +1,6 @@
 'use strict';
 
-const { authSequelize } = require('../server/auth/models');
+// const { authSequelize } = require('../server/auth/models');
 const { app } = require('../server/server.js');
 const supertest = require('supertest');
 const request = supertest(app);
@@ -9,14 +9,14 @@ const base64 = require('base-64');
 
 //server/index.js and this test file are both syncing the database...need to fix
 
-beforeAll((done) => {
-  authSequelize.sync();
-  done();
-});
+// beforeAll((done) => {
+//   authSequelize.sync();
+//   done();
+// });
 
-afterAll(() => {
-  authSequelize.drop();
-});
+// afterAll(() => {
+//   authSequelize.drop();
+// });
 
 
 describe('Auth Route Testing', () => {

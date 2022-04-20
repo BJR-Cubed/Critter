@@ -16,7 +16,7 @@ const sequelizeConfig = process.env.HEROKU_POSTGRESQL_GOLD_URL ?
   } :
   {};
 
-const dbUrl = process.env.HEROKU_POSTGRESQL_GOLD_URL || 'sqlite::memory';
+const dbUrl = process.env.HEROKU_POSTGRESQL_GOLD_URL || 'sqlite:memory';
 
 const sequelize = new Sequelize(dbUrl, sequelizeConfig);
 
