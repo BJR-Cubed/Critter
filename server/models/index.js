@@ -2,7 +2,7 @@
 
 const { Sequelize, DataTypes } = require('sequelize');
 
-// const userModel = require('./users');
+const messageModel = require('./messages');
 
 // This will assign the Heroku-specific configs if the database is deployed.
 const sequelizeConfig = process.env.DATABASE_URL ?
@@ -16,11 +16,11 @@ const sequelizeConfig = process.env.DATABASE_URL ?
   } :
   {};
 
-const dbUrl = process.env.DATABASE_URL || 'sqlite::memory';
+const dbUrl = process.env.DATABASE_URL || 'sqlite:messages';
 
 const sequelize = new Sequelize(dbUrl, sequelizeConfig);
 
 module.exports = {
   contentSequelize: sequelize,
-  // users: userModel(sequelize, DataTypes),
+  messages: messageModel(sequelize, DataTypes),
 };
