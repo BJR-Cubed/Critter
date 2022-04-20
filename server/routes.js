@@ -41,6 +41,7 @@ router.get('/messages', bearerAuth, async (req, res, next) => {
 router.get('/messages/:id', bearerAuth, async (req, res, next) => {
   try{
     let record = await messages.findOne({id: req.params.id});
+    if(!record) throw new Error('Record not found');
     res.status(200).json(record);
   }catch (error) {
     console.error(error);
