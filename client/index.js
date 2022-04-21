@@ -5,8 +5,11 @@ const inquirer = require('inquirer');
 
 const axios = require('axios');
 
+let API_URL = process.env.API_URL || 'http://localhost:3000';
 // axios.get
 // axios.post
+
+let globalAnswers = [];
 
 const questions = [
   {
@@ -21,26 +24,56 @@ const questions = [
   },
   {
     type: 'input',
-    name: 'enterNewUserName',
-    message: 'What would you like your username to be?',
-    filter(response) {
-      return response.toLowerCase();
-    },
+    name: 'enterNewDisplayName',
+    message: 'What would you like your Display Name to be?',
     prefix: '',
     when(answers) {
       return answers.hasAccount === 'no';
     } ,
   },
+  {
+    type: 'input',
+    name: 'enterNewHandle',
+    message: 'What would you like your handle to be?',
+    prefix: '',
+    when(answers) {
+      return answers.enterNewDisplayName;
+    } ,
+  },
+  {
+    type: 'password',
+    name: 'newPassword',
+    message: 'What would you like your password to be?',
+    mask: '*',
+    prefix: '',
+    when(answers){
+      return answers.enterNewHandle;
+    },
+  },
   
 ];
+
+let handleSignup = async (displayName, handle, password) =>{
+  let data = {
+    displayName,
+    handle,
+    password,
+  };
+  let response = await axios.post(`${API_URL}/signup`, data );
+  console.log(response.data);
+};
 
 
 inquirer
   .prompt(questions)
-  .then((answers) => {
+  .then( async (answers) => {
     console.log(answers, ' are the answers');
+    globalAnswers[0] = answers;
+    await handleSignup(answers.enterNewDisplayName, answers.enterNewHandle, answers.newPassword);
   })
-;
+  .then(() => {
+    console.log(globalAnswers[0].newPassword);
+  });
 
 // inquirer.prompt(questions).then((answers) => {
 //   console.log('\nOrder receipt:');
