@@ -44,9 +44,16 @@ Optionally, create an env file with `PORT` and `SECRET` to set your own port num
 
 ## Usage
 
-- Run `npm start` to start the server application
+### Server Usage
+
+- Run `npm start` to start the server application.
 - Use an HTTP client to send requests to the API.
-<!-- - Run `node client` to start the client application -->
+
+### Client Usage
+
+- Run `npm run client-start` to start the client application.
+- Follow the on-screen prompts to sign-up / sign-in and choose a CRUD request to send.
+
 ### Testing
 
 - Run `npm test` to run the Jest test suites.
