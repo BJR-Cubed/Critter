@@ -26,7 +26,7 @@ const questions = [
     prefix: '',
     when(answers) {
       return answers.hasAccount === 'no';
-    } ,
+    },
   },
   {
     type: 'input',
@@ -35,7 +35,7 @@ const questions = [
     prefix: '',
     when(answers) {
       return answers.enterNewDisplayName;
-    } ,
+    },
   },
   {
     type: 'password',
@@ -43,7 +43,7 @@ const questions = [
     message: 'What would you like your password to be?',
     mask: '*',
     prefix: '',
-    when(answers){
+    when(answers) {
       return answers.enterNewHandle;
     },
   },
@@ -54,7 +54,7 @@ const questions = [
     prefix: '',
     when(answers) {
       return answers.hasAccount === 'yes';
-    } ,
+    },
   },
   {
     type: 'password',
@@ -64,27 +64,27 @@ const questions = [
     prefix: '',
     when(answers) {
       return answers.hasAccount === 'yes';
-    } ,
+    },
   },
 
 ];
 
-let handleSignup = async (displayName, handle, password) =>{
+let handleSignup = async (displayName, handle, password) => {
   let data = {
     displayName,
     handle,
     password,
   };
-  let response = await axios.post(`${API_URL}/signup`, data );
+  let response = await axios.post(`${API_URL}/signup`, data);
   console.log('handlesignup response.data:', response.data);
   console.log('response.data.token is  (atsignupfunc)', response.data.token);
   return response.data.token;
 };
 
 //signin function needed
-let handleSignin = async (handle, password) =>{
+let handleSignin = async (handle, password) => {
   console.log('handle and password are:', handle, password);
-  let response = await axios.post(`${API_URL}/signin`, null, {auth: {username: handle, password: password} } );
+  let response = await axios.post(`${API_URL}/signin`, null, { auth: { username: handle, password: password } });
   console.log('response.data.token is (atsigninfunc)', response.data.token);
   return response.data.token;
 };
@@ -121,11 +121,11 @@ const questions2 = [
   },
 ];
 
-async function promptContainer () {
-  
+async function promptContainer() {
+
   await inquirer
     .prompt(questions)
-    .then( async (answers) => {
+    .then(async (answers) => {
       console.log(answers, ' are the answers');
       if (answers.hasAccount === 'yes') {
         token = await handleSignin(answers.enterLoginHandle, answers.enterPassword);
@@ -136,11 +136,11 @@ async function promptContainer () {
     .then(() => {
       console.log('token is  (at inquirer)', token);
     });
-  
-  await inquirer.prompt(questions2).then( async (answers) => {
+
+  await inquirer.prompt(questions2).then(async (answers) => {
     console.log('\nProof of life answers so far');
-    
-    switch (answers.CRUD){
+
+    switch (answers.CRUD) {
     case 'create':
       await handleCreate(answers.body);
       break;
@@ -152,19 +152,19 @@ async function promptContainer () {
       break;
     case 'delete':
       await handleDelete(answers.id);
-      break;  
+      break;
     default:
       console.log('Invalid selection');
     }
-    
-  }); 
+
+  });
 }
 
 let handleCreate = async (body) => {
   const data = {
     body,
   };
-  const config = { headers: {'Authorization': `Bearer ${token}` }};
+  const config = { headers: { 'Authorization': `Bearer ${token}` } };
   let response = await axios.post(`${API_URL}/messages`, data, config);
   console.log(response.data);
 };
@@ -173,20 +173,20 @@ let handleUpdate = async (body, id) => {
   const data = {
     body,
   };
-  const config = { headers: {'Authorization': `Bearer ${token}` }};
+  const config = { headers: { 'Authorization': `Bearer ${token}` } };
   let response = await axios.put(`${API_URL}/messages/${id}`, data, config);
   console.log(response.data);
 };
 
 let handleRead = async (id) => {
-  const config = { headers: {'Authorization': `Bearer ${token}` }};
+  const config = { headers: { 'Authorization': `Bearer ${token}` } };
   let route = `${API_URL}/messages/${id}`;
   let response = await axios.get(route, config);
   console.log(response.data);
 };
 
 let handleDelete = async (id) => {
-  const config = { headers: {'Authorization': `Bearer ${token}` }};
+  const config = { headers: { 'Authorization': `Bearer ${token}` } };
   let route = `${API_URL}/messages/${id}`;
   let response = await axios.delete(route, config);
   console.log(response.status);
