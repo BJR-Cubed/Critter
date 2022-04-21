@@ -1,13 +1,10 @@
 'use strict';
 
-const base64 = require('base-64');
 const inquirer = require('inquirer');
 
 const axios = require('axios');
 
 let API_URL = process.env.API_URL || 'http://localhost:3000';
-// axios.get
-// axios.post
 
 let token = '';
 
@@ -86,32 +83,11 @@ let handleSignup = async (displayName, handle, password) =>{
 
 //signin function needed
 let handleSignin = async (handle, password) =>{
-  // let data = {
-  //   handle,
-  //   password,
-  // };
   console.log('handle and password are:', handle, password);
   let response = await axios.post(`${API_URL}/signin`, null, {auth: {username: handle, password: password} } );
   console.log('response.data.token is (atsigninfunc)', response.data.token);
   return response.data.token;
-
 };
-
-
-// inquirer
-//   .prompt(questions)
-//   .then( async (answers) => {
-//     console.log(answers, ' are the answers');
-//     if (answers.hasAccount === 'yes') {
-//       token = await handleSignin(answers.enterLoginHandle, answers.enterPassword);
-//     } else if (answers.hasAccount === 'no') {
-//       token = await handleSignup(answers.enterNewDisplayName, answers.enterNewHandle, answers.newPassword);
-//     }
-//   })
-//   .then(() => {
-//     console.log('token is  (at inquirer)', token);
-
-//   });
 
 // questions2 array will contain our choices 
 const questions2 = [
@@ -125,14 +101,25 @@ const questions2 = [
     },
     prefix: '',
   },
+  {
+    type: 'input',
+    name: 'id',
+    message: 'Specify the message id',
+    prefix: '',
+    when(answers) {
+      return answers.CRUD === 'update' || answers.CRUD === 'delete' || answers.CRUD === 'read';
+    },
+  },
+  {
+    type: 'input',
+    name: 'body',
+    message: 'Specify the body text',
+    prefix: '',
+    when(answers) {
+      return answers.CRUD === 'update' || answers.CRUD === 'create';
+    },
+  },
 ];
-
-
-
-// inquirer.prompt(questions2).then((answers) => {
-//   console.log('\nProof of life answers so far');
-//   console.log(answers);
-// });
 
 async function promptContainer () {
   
@@ -150,20 +137,59 @@ async function promptContainer () {
       console.log('token is  (at inquirer)', token);
     });
   
-  await inquirer.prompt(questions2).then((answers) => {
+  await inquirer.prompt(questions2).then( async (answers) => {
     console.log('\nProof of life answers so far');
-    console.log(answers);
-  });
-
+    
+    switch (answers.CRUD){
+    case 'create':
+      await handleCreate(answers.body);
+      break;
+    case 'read':
+      await handleRead(answers.id);
+      break;
+    case 'update':
+      await handleUpdate(answers.body, answers.id);
+      break;
+    case 'delete':
+      await handleDelete(answers.id);
+      break;  
+    default:
+      console.log('Invalid selection');
+    }
+    
+  }); 
 }
 
+let handleCreate = async (body) => {
+  const data = {
+    body,
+  };
+  const config = { headers: {'Authorization': `Bearer ${token}` }};
+  let response = await axios.post(`${API_URL}/messages`, data, config);
+  console.log(response.data);
+};
+
+let handleUpdate = async (body, id) => {
+  const data = {
+    body,
+  };
+  const config = { headers: {'Authorization': `Bearer ${token}` }};
+  let response = await axios.put(`${API_URL}/messages/${id}`, data, config);
+  console.log(response.data);
+};
+
+let handleRead = async (id) => {
+  const config = { headers: {'Authorization': `Bearer ${token}` }};
+  let route = `${API_URL}/messages/${id}`;
+  let response = await axios.get(route, config);
+  console.log(response.data);
+};
+
+let handleDelete = async (id) => {
+  const config = { headers: {'Authorization': `Bearer ${token}` }};
+  let route = `${API_URL}/messages/${id}`;
+  let response = await axios.delete(route, config);
+  console.log(response.status);
+};
+
 promptContainer();
-
-// signin sign up block
-// while loop inquirer prompt until escape key
-
-
-// inquirer.prompt(questions).then((answers) => {
-//   console.log('\nOrder receipt:');
-//   console.log(JSON.stringify(answers, null, '  '));
-// });
