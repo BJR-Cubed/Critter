@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest --coverage --verbose",
     "start": "node server",
+    "start-client": "node client",
     "init:config": "sequelize:config",
     "db:create": "sequelize:db:create"
   },
