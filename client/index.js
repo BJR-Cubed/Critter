@@ -92,32 +92,72 @@ let handleSignin = async (handle, password) =>{
   // };
   console.log('handle and password are:', handle, password);
   let response = await axios.post(`${API_URL}/signin`, null, {auth: {username: handle, password: password} } );
-  // console.log('handlesignin response.data:', response.data);
   console.log('response.data.token is (atsigninfunc)', response.data.token);
   return response.data.token;
 
 };
 
 
-inquirer
-  .prompt(questions)
-  .then( async (answers) => {
-    console.log(answers, ' are the answers');
-    // globalAnswers[0] = answers;
+// inquirer
+//   .prompt(questions)
+//   .then( async (answers) => {
+//     console.log(answers, ' are the answers');
+//     if (answers.hasAccount === 'yes') {
+//       token = await handleSignin(answers.enterLoginHandle, answers.enterPassword);
+//     } else if (answers.hasAccount === 'no') {
+//       token = await handleSignup(answers.enterNewDisplayName, answers.enterNewHandle, answers.newPassword);
+//     }
+//   })
+//   .then(() => {
+//     console.log('token is  (at inquirer)', token);
 
-    if (answers.hasAccount === 'yes') {
-      // handleSignin function called here
-      token = await handleSignin(answers.enterLoginHandle, answers.enterPassword);
-    } else if (answers.hasAccount === 'no') {
-      token = await handleSignup(answers.enterNewDisplayName, answers.enterNewHandle, answers.newPassword);
-    }
-  })
-  .then(() => {
-    console.log('token is  (at inquirer)', token);
+//   });
 
-    // console.log('globalanswers[]0.newpassword is', globalAnswers[0].newPassword);
+// questions2 array will contain our choices 
+const questions2 = [
+  {
+    type: 'list',
+    name: 'CRUD',
+    message: 'make your crud command',
+    choices: ['Read', 'Create', 'Update', 'Delete'],
+    filter(response) {
+      return response.toLowerCase();
+    },
+    prefix: '',
+  },
+];
+
+
+
+// inquirer.prompt(questions2).then((answers) => {
+//   console.log('\nProof of life answers so far');
+//   console.log(answers);
+// });
+
+async function promptContainer () {
+  
+  await inquirer
+    .prompt(questions)
+    .then( async (answers) => {
+      console.log(answers, ' are the answers');
+      if (answers.hasAccount === 'yes') {
+        token = await handleSignin(answers.enterLoginHandle, answers.enterPassword);
+      } else if (answers.hasAccount === 'no') {
+        token = await handleSignup(answers.enterNewDisplayName, answers.enterNewHandle, answers.newPassword);
+      }
+    })
+    .then(() => {
+      console.log('token is  (at inquirer)', token);
+    });
+  
+  await inquirer.prompt(questions2).then((answers) => {
+    console.log('\nProof of life answers so far');
+    console.log(answers);
   });
 
+}
+
+promptContainer();
 
 // signin sign up block
 // while loop inquirer prompt until escape key
