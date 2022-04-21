@@ -19,7 +19,21 @@ const questions = [
     },
     prefix: '',
   },
+  {
+    type: 'input',
+    name: 'enterNewUserName',
+    message: 'What would you like your username to be?',
+    filter(response) {
+      return response.toLowerCase();
+    },
+    prefix: '',
+    when(answers) {
+      return answers.hasAccount === 'no';
+    } ,
+  },
+  
 ];
+
 
 inquirer
   .prompt(questions)
