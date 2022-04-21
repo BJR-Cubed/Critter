@@ -3,6 +3,7 @@
 const inquirer = require('inquirer');
 
 const axios = require('axios');
+require('dotenv').config();
 
 let API_URL = process.env.API_URL || 'http://localhost:3000';
 
@@ -76,20 +77,14 @@ let handleSignup = async (displayName, handle, password) => {
     password,
   };
   let response = await axios.post(`${API_URL}/signup`, data);
-  console.log('handlesignup response.data:', response.data);
-  console.log('response.data.token is  (atsignupfunc)', response.data.token);
   return response.data.token;
 };
 
-//signin function needed
 let handleSignin = async (handle, password) => {
-  console.log('handle and password are:', handle, password);
   let response = await axios.post(`${API_URL}/signin`, null, { auth: { username: handle, password: password } });
-  console.log('response.data.token is (atsigninfunc)', response.data.token);
   return response.data.token;
 };
 
-// questions2 array will contain our choices 
 const questions2 = [
   {
     type: 'list',
@@ -126,20 +121,14 @@ async function promptContainer() {
   await inquirer
     .prompt(questions)
     .then(async (answers) => {
-      console.log(answers, ' are the answers');
       if (answers.hasAccount === 'yes') {
         token = await handleSignin(answers.enterLoginHandle, answers.enterPassword);
       } else if (answers.hasAccount === 'no') {
         token = await handleSignup(answers.enterNewDisplayName, answers.enterNewHandle, answers.newPassword);
       }
-    })
-    .then(() => {
-      console.log('token is  (at inquirer)', token);
     });
 
   await inquirer.prompt(questions2).then(async (answers) => {
-    console.log('\nProof of life answers so far');
-
     switch (answers.CRUD) {
     case 'create':
       await handleCreate(answers.body);
@@ -156,7 +145,6 @@ async function promptContainer() {
     default:
       console.log('Invalid selection');
     }
-
   });
 }
 
