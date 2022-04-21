@@ -9,7 +9,7 @@ let API_URL = process.env.API_URL || 'http://localhost:3000';
 // axios.get
 // axios.post
 
-let globalAnswers = [];
+let token = '';
 
 const questions = [
   {
@@ -80,6 +80,8 @@ let handleSignup = async (displayName, handle, password) =>{
   };
   let response = await axios.post(`${API_URL}/signup`, data );
   console.log('handlesignup response.data:', response.data);
+  console.log('response.data.token is  (atsignupfunc)', response.data.token);
+  return response.data.token;
 };
 
 //signin function needed
@@ -91,6 +93,9 @@ let handleSignin = async (handle, password) =>{
   console.log('handle and password are:', handle, password);
   let response = await axios.post(`${API_URL}/signin`, null, {auth: {username: handle, password: password} } );
   // console.log('handlesignin response.data:', response.data);
+  console.log('response.data.token is (atsigninfunc)', response.data.token);
+  return response.data.token;
+
 };
 
 
@@ -98,16 +103,19 @@ inquirer
   .prompt(questions)
   .then( async (answers) => {
     console.log(answers, ' are the answers');
-    globalAnswers[0] = answers;
+    // globalAnswers[0] = answers;
+
     if (answers.hasAccount === 'yes') {
       // handleSignin function called here
-      await handleSignin(answers.enterLoginHandle, answers.enterPassword);
+      token = await handleSignin(answers.enterLoginHandle, answers.enterPassword);
     } else if (answers.hasAccount === 'no') {
-      await handleSignup(answers.enterNewDisplayName, answers.enterNewHandle, answers.newPassword);
+      token = await handleSignup(answers.enterNewDisplayName, answers.enterNewHandle, answers.newPassword);
     }
   })
   .then(() => {
-    console.log('globalanswers[]0.newpassword is', globalAnswers[0].newPassword);
+    console.log('token is  (at inquirer)', token);
+
+    // console.log('globalanswers[]0.newpassword is', globalAnswers[0].newPassword);
   });
 
 
