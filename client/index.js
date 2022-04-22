@@ -99,7 +99,7 @@ const questions2 = [
   {
     type: 'input',
     name: 'id',
-    message: 'Specify the message id or press enter to see all messages',
+    message: 'Please specify the message id ',
     prefix: '',
     when(answers) {
       return answers.CRUD === 'update an existing post' || answers.CRUD === 'delete a post' || answers.CRUD === 'see existing posts';
