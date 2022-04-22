@@ -102,7 +102,6 @@ These are the "general-purpose" SQL schemas for our databases.
 ```js
 {
     author: STRING, // Required
-    timestamp: INTEGER, // Required 
     body: STRING, // Required
     length: INTEGER, // Required and auto populated
 }

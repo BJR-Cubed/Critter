@@ -25,14 +25,14 @@ describe('Content Routes functionality with login token', () => {
       });
     
     expect(response.status).toBe(201); 
-    expect(response.body.timestamp).toBeTruthy();
+    expect(response.body.body).toBeTruthy();
   });
 
   test('Should get messages', async () => {
     let response = await request.get('/messages').set('authorization', `Bearer ${testUser.token}`);
 
     expect(response.status).toBe(200);
-    expect(response.body[0].timestamp).toBeTruthy();
+    expect(response.body[0].body).toBeTruthy();
     expect(response.body.length).toBeGreaterThan(0);
   });
 
