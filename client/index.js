@@ -89,8 +89,8 @@ const questions2 = [
   {
     type: 'list',
     name: 'CRUD',
-    message: 'make your crud command',
-    choices: ['Read', 'Create', 'Update', 'Delete'],
+    message: 'What would you like to do?',
+    choices: ['See existing posts', 'Create a post', 'Update an existing post', 'Delete a post'],
     filter(response) {
       return response.toLowerCase();
     },
@@ -99,10 +99,10 @@ const questions2 = [
   {
     type: 'input',
     name: 'id',
-    message: 'Specify the message id',
+    message: 'Specify the message id or press enter to see all messages',
     prefix: '',
     when(answers) {
-      return answers.CRUD === 'update' || answers.CRUD === 'delete' || answers.CRUD === 'read';
+      return answers.CRUD === 'update an existing post' || answers.CRUD === 'delete a post' || answers.CRUD === 'see existing posts';
     },
   },
   {
@@ -111,13 +111,12 @@ const questions2 = [
     message: 'Specify the body text',
     prefix: '',
     when(answers) {
-      return answers.CRUD === 'update' || answers.CRUD === 'create';
+      return answers.CRUD === 'update an existing post' || answers.CRUD === 'create a post';
     },
   },
 ];
 
 async function promptContainer() {
-
   await inquirer
     .prompt(questions)
     .then(async (answers) => {
@@ -130,16 +129,16 @@ async function promptContainer() {
 
   await inquirer.prompt(questions2).then(async (answers) => {
     switch (answers.CRUD) {
-    case 'create':
+    case 'create a post':
       await handleCreate(answers.body);
       break;
-    case 'read':
+    case 'see existing posts':
       await handleRead(answers.id);
       break;
-    case 'update':
+    case 'update an existing post':
       await handleUpdate(answers.body, answers.id);
       break;
-    case 'delete':
+    case 'delete a post':
       await handleDelete(answers.id);
       break;
     default:
