@@ -12,7 +12,6 @@ router.post('/messages', bearerAuth, async (req, res, next) => {
     if (!req.body) throw new Error('No req.body');
     let newRecord = await messages.create({ 
       ...req.body,
-      timestamp: Date.now(),
       length: req.body.body.length,
       author: req.user.handle,
     });
